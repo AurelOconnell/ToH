@@ -3,7 +3,7 @@ import { NgFor } from '@angular/common';
 
 import { HeroDetailsComponent } from '../hero-details/hero-details.component';
 import { Hero } from '../hero';
-import { HEROES } from '../mock-heroes';
+import { HeroService } from '../hero.service';
 
 @Component({
   standalone: true,
@@ -13,11 +13,24 @@ import { HEROES } from '../mock-heroes';
   imports: [NgFor, HeroDetailsComponent],
 })
 export class HeroesComponent {
-  heroes = HEROES;
-  
+
   selectedHero?: Hero;
+
+  heroes: Hero[] = [];
+
+  constructor(private heroService: HeroService) { }
 
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
   }
+
+  getHeroes(): void {
+    this.heroService.getHeroes()
+      .subscribe(heroes => this.heroes = heroes);
+  }
+
+  ngOnInit() {
+    this.getHeroes();
+  }
+  
 }
